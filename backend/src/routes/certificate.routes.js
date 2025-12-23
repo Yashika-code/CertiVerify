@@ -20,7 +20,7 @@ router.post("/issue", protect, allowRoles("admin"), issueCertificate);
 router.post("/verify", verifyCertificate);
 
 // Serve certificate file (public)
-router.get("/file/:certificateId", serveCertificateFile);
+router.get("/:certificateId.pdf", serveCertificateFile);
 
 // Admin: backfill certificateUrl for existing certs
 router.post("/backfill", protect, allowRoles("admin"), backfillCertificateUrls);
@@ -30,5 +30,6 @@ router.get("/my", protect, allowRoles("student"), getMyCertificates);
 
 // Admin: view all certificates
 router.get("/", protect, allowRoles("admin"), getAllCertificates);
+
 
 export default router;
