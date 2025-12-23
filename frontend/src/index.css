@@ -1,0 +1,4 @@
+@import "tailwindcss";
+.sidebar-btn {
+  @apply mb-3 w-full text-left px-4 py-2 border rounded-md hover:bg-gray-100;
+}
