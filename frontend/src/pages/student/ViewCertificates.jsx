@@ -92,14 +92,16 @@ const ViewCertificates = () => {
                   <span className="text-green-600">{cert.status}</span>
                   <span>
                     {cert.certificateUrl ? (
-                      <a
-                        href={`${backendOrigin}${cert.certificateUrl}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+                      <button
+                        className="text-blue-600 hover:underline flex items-center gap-1"
+                        onClick={() =>
+                          window.open(`${backendOrigin}/${cert.certificateUrl.replace(/^\/+/, '')}`, "_blank")
+
+                        }
                       >
-                        View
-                      </a>
+                        <Eye size={14} /> View
+                      </button>
+
                     ) : (
                       <span className="text-gray-400">NA</span>
                     )}

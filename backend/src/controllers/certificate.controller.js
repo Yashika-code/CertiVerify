@@ -158,22 +158,26 @@ export const getAllCertificates = async (req, res) => {
 export const serveCertificateFile = async (req, res) => {
   try {
     const { certificateId } = req.params;
-    if (!certificateId) return res.status(400).send('certificateId required');
 
-    const cert = await Certificate.findOne({ certificateId });
-    if (!cert) return res.status(404).json({ message: 'Certificate not found' });
+    const filePath = path.join(
+      process.cwd(),
+      "public",
+      "certificates",
+      `${certificateId}.pdf`
+    );
 
-    const filePath = path.join(process.cwd(), 'public', 'certificates', `${certificateId}.pdf`);
     if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ message: 'Certificate file not found' });
+      return res.status(404).json({ message: "Certificate not found" });
     }
 
+    res.setHeader("Content-Type", "application/pdf");
     return res.sendFile(filePath);
+
   } catch (err) {
-    console.error('Serve certificate file error:', err);
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: "Server error" });
   }
 };
+
 
 // ADMIN: Backfill certificateUrl for existing certificates (admin only)
 export const backfillCertificateUrls = async (req, res) => {
@@ -192,5 +196,21 @@ export const backfillCertificateUrls = async (req, res) => {
   } catch (err) {
     console.error('Backfill error:', err);
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// DOWNLOAD certificate (forces download)
+export const downloadCertificateFile = async (req, res) => {
+  try {
+    const { certificateId } = req.params;
+    const filePath = path.join(process.cwd(), "public", "certificates", `${certificateId}.pdf`);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ message: "File not found" });
+    }
+
+    return res.download(filePath, `${certificateId}.pdf`);
+  } catch (err) {
+    return res.status(500).json({ message: "Server error" });
   }
 };

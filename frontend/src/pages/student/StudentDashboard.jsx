@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { certificateAPI } from "../../services/api";
-import { Eye, FileText } from "lucide-react";
+import { Download, Eye, FileText } from "lucide-react";
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -17,8 +17,7 @@ const StudentDashboard = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const backendOrigin =
-    (import.meta.env.VITE_API_URL || "http://localhost:3000").replace("/api", "");
+  const backendOrigin = (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/api$/, "");
 
   return (
     <div className="h-screen bg-gray-100">
@@ -89,30 +88,19 @@ const StudentDashboard = () => {
 
                   <div className="mt-4 space-y-2">
                     <button
-                      disabled={!cert.certificateUrl}
+                      className="text-blue-600 hover:underline flex items-center gap-1"
                       onClick={() =>
-                        window.open(`${backendOrigin}${cert.certificateUrl}`, "_blank")
+                        window.open(`${backendOrigin}/${cert.certificateUrl.replace(/^\/+/, '')}`, "_blank")
+
                       }
-                      className={`w-full py-2 rounded font-medium ${
-                        cert.certificateUrl
-                          ? "bg-blue-600 text-white hover:bg-blue-700"
-                          : "bg-gray-300 text-gray-600 cursor-not-allowed"
-                      }`}
                     >
-                      View Certificate
+                      <Eye size={14} /> View
                     </button>
 
                     {cert.certificateUrl && (
-                      <button
-                        onClick={() => {
-                          const link = document.createElement("a");
-                          link.href = `${backendOrigin}${cert.certificateUrl}`;
-                          link.download = `${cert.certificateId}.pdf`;
-                          link.click();
-                        }}
-                        className="w-full py-2 rounded bg-green-600 text-white hover:bg-green-700"
-                      >
-                        Download
+                      <button className="text-green-600 hover:underline flex items-center gap-1"
+                        onClick={() => window.open(`${backendOrigin}/api/certificates/download/${cert.certificateId}`, "_blank")}>
+                        <Download size={14} /> Download
                       </button>
                     )}
                   </div>

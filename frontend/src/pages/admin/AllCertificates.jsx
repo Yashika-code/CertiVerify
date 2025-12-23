@@ -109,29 +109,27 @@ const AllCertificates = () => {
                     </span>
 
                     <div className="flex gap-3">
+                      {/* VIEW */}
                       <button
                         className="text-blue-600 hover:underline flex items-center gap-1"
                         onClick={() =>
-                          window.open(`${backendOrigin}${cert.certificateUrl}`, "_blank")
+                          window.open(`${backendOrigin}/${cert.certificateUrl.replace(/^\/+/, '')}`, "_blank")
+
                         }
                       >
                         <Eye size={14} /> View
                       </button>
 
+
+                      {/* DOWNLOAD */}
                       {cert.certificateUrl && (
-                        <button
-                          className="text-green-600 hover:underline flex items-center gap-1"
-                          onClick={() => {
-                            const link = document.createElement("a");
-                            link.href = `${backendOrigin}${cert.certificateUrl}`;
-                            link.download = `${cert.certificateId}.pdf`;
-                            link.click();
-                          }}
-                        >
+                        <button className="text-green-600 hover:underline flex items-center gap-1"
+                          onClick={() => window.open(`${backendOrigin}/api/certificates/download/${cert.certificateId}`, "_blank")}>
                           <Download size={14} /> Download
                         </button>
                       )}
                     </div>
+
                   </div>
                 ))
               )}

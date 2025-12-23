@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
 import { certificateAPI, authAPI } from "../../services/api";
+import { Download } from "lucide-react";
 
 const VerifyCertificate = () => {
   const [certId, setCertId] = useState("");
@@ -24,7 +25,7 @@ const VerifyCertificate = () => {
           setUserName(name);
           localStorage.setItem("userName", name);
         }
-      }).catch(() => {});
+      }).catch(() => { });
   }, []);
 
   const handleVerify = async () => {
@@ -75,15 +76,17 @@ const VerifyCertificate = () => {
 
               {result.certificate?.certificateUrl && (
                 <button
-                  className="mt-3 bg-green-600 text-white px-4 py-2 rounded"
+                  className="text-green-600 hover:underline flex items-center gap-1"
                   onClick={() => {
                     const link = document.createElement("a");
-                    link.href = `${backendOrigin}${result.certificate.certificateUrl}`;
+                    link.href = `${backendOrigin}/api/certificates/download/${result.certificate.certificateId}`;
                     link.download = `${result.certificate.certificateId}.pdf`;
+                    document.body.appendChild(link);
                     link.click();
+                    document.body.removeChild(link);
                   }}
                 >
-                  📥 Download Certificate
+                  <Download size={14} /> Download
                 </button>
               )}
             </div>
