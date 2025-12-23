@@ -172,6 +172,8 @@ npm run dev
 
 ---
 
+## Project Live -> https://certi-verify-six.vercel.app
+
 ## 🤝 Conclusion
 
 This project is built with **industry practices in mind** — scalable, secure, and practical.

@@ -2,14 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import { certificateAPI } from "../../services/api";
-import { Eye, FileText } from "lucide-react";
+import { Eye, FileText, Download } from "lucide-react";
 
 const ViewCertificates = () => {
+  const backendOrigin =
+    (import.meta.env.VITE_API_URL || "http://localhost:3000").replace("/api", "");
+
   const navigate = useNavigate();
   const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const handleDownload = (certificateUrl, certificateId) => {
+    const link = document.createElement("a");
+    link.href = `${backendOrigin}${certificateUrl}`;
+    link.download = `Certificate-${certificateId}.pdf`;
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   useEffect(() => {
     certificateAPI.getMyCertificates()
       .then(res => setCertificates(res.data.certificates || []))
@@ -82,7 +93,7 @@ const ViewCertificates = () => {
                   <span>
                     {cert.certificateUrl ? (
                       <a
-                        href={cert.certificateUrl}
+                        href={`${backendOrigin}${cert.certificateUrl}`}
                         target="_blank"
                         rel="noreferrer"
                         className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
