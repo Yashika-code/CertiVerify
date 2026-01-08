@@ -1,12 +1,11 @@
 import express from "express";
 import {
   registerStudent,
-  registerCompany,
-  registerVerifier,
   loginUser,
-  LogoutUser,
   getAllStudents,
-  getCurrentUser
+  getCurrentUser,
+  logout,
+  refresh
 } from "../controllers/auth.controller.js";
 import { protect } from "../middlewares/auth.middleware.js";
 import { allowRoles } from "../middlewares/role.middleware.js";
@@ -14,13 +13,12 @@ import { allowRoles } from "../middlewares/role.middleware.js";
 const router = express.Router();
 
 // register
-router.post("/register-student", registerStudent);
-router.post("/register-company", registerCompany);
-router.post("/register-verifier", registerVerifier);
+router.post("/register", registerStudent);
 
 // login (single)
 router.post("/login", loginUser);
-router.post("/logout", LogoutUser);
+router.post("/logout", logout);
+router.post("/refresh",refresh)
 
 // current user
 router.get("/me", protect, getCurrentUser);
