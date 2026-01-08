@@ -17,7 +17,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -169,7 +169,7 @@ const Login = () => {
               placeholder="your@email.com"
               className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 validationErrors.email ? "border-red-500" : "border-gray-300"
-              }`}
+                }`}
             />
             {validationErrors.email && (
               <p className="mt-1 text-sm text-red-600">{validationErrors.email}</p>
@@ -190,7 +190,7 @@ const Login = () => {
               placeholder="Enter your password"
               className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                 validationErrors.password ? "border-red-500" : "border-gray-300"
-              }`}
+                }`}
             />
             {validationErrors.password && (
               <p className="mt-1 text-sm text-red-600">{validationErrors.password}</p>
