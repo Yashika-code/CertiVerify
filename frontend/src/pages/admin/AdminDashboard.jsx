@@ -18,7 +18,7 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
 
   const backendOrigin =
-    (import.meta.env.VITE_API_URL || "http://localhost:3000").replace(/\/api$/, "");
+    (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api$/, "");
 
   const isActive = (path) => location.pathname === path;
 

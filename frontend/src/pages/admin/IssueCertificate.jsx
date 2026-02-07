@@ -10,6 +10,8 @@ const IssueCertificate = () => {
 
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [formData, setFormData] = useState({
     studentId: "",
     course: "",
@@ -24,11 +26,23 @@ const IssueCertificate = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
     setLoading(true);
-    await certificateAPI.issue(formData);
-    alert("Certificate Issued Successfully");
-    setFormData({ studentId: "", course: "" });
-    setLoading(false);
+    try {
+      await certificateAPI.issue(formData);
+      setSuccess("Certificate Issued Successfully!");
+      setFormData({ studentId: "", course: "" });
+      setTimeout(() => {
+        setSuccess("");
+      }, 3000);
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || err.message || "Failed to issue certificate";
+      setError(errorMsg);
+      console.error("Issue error:", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -72,6 +86,18 @@ const IssueCertificate = () => {
           <div className="bg-white p-6 rounded-xl shadow max-w-xl">
             <h1 className="text-xl font-semibold mb-4">Issue New Certificate</h1>
 
+            {error && (
+              <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
+                <p className="text-red-700 text-sm font-medium">{error}</p>
+              </div>
+            )}
+
+            {success && (
+              <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md">
+                <p className="text-green-700 text-sm font-medium">{success}</p>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <select
                 required
@@ -101,7 +127,7 @@ const IssueCertificate = () => {
 
               <button
                 disabled={loading}
-                className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+                className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? "Issuing..." : "Issue Certificate"}
               </button>

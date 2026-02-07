@@ -6,7 +6,7 @@ import { Eye, FileText, Download } from "lucide-react";
 
 const ViewCertificates = () => {
   const backendOrigin =
-    (import.meta.env.VITE_API_URL || "http://localhost:3000").replace("/api", "");
+    (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api$/, "");
 
   const navigate = useNavigate();
   const [certificates, setCertificates] = useState([]);

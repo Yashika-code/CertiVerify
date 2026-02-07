@@ -6,6 +6,7 @@ import Register from "./pages/auth/Register";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import IssueCertificate from "./pages/admin/IssueCertificate";
 import AllCertificates from "./pages/admin/AllCertificates";
+import ManageUsers from "./pages/admin/ManageUsers";
 
 import StudentDashboard from "./pages/student/StudentDashboard";
 import ViewCertificates from "./pages/student/ViewCertificates";
@@ -44,6 +45,14 @@ const App = () => {
         element={
           <ProtectedRoute role="admin">
             <AllCertificates />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/manage-users"
+        element={
+          <ProtectedRoute role="admin">
+            <ManageUsers />
           </ProtectedRoute>
         }
       />

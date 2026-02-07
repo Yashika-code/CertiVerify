@@ -1,6 +1,8 @@
 import express from "express";
 import {
   registerStudent,
+  registerAdmin,
+  registerVerifier,
   loginUser,
   getAllStudents,
   getCurrentUser,
@@ -12,13 +14,19 @@ import { allowRoles } from "../middlewares/role.middleware.js";
 
 const router = express.Router();
 
-// register
+// Public: Student self-register
 router.post("/register", registerStudent);
 
-// login (single)
+// Admin only: Create admin user
+router.post("/register-admin", protect, allowRoles("admin"), registerAdmin);
+
+// Admin only: Create verifier user
+router.post("/register-verifier", protect, allowRoles("admin"), registerVerifier);
+
+// login (single endpoint for all roles)
 router.post("/login", loginUser);
 router.post("/logout", logout);
-router.post("/refresh",refresh)
+router.post("/refresh", refresh)
 
 // current user
 router.get("/me", protect, getCurrentUser);

@@ -85,47 +85,43 @@ const Login = () => {
     setLoading(true);
 
     try {
-      // Send credentials to backend
       const response = await authAPI.login({
         email: formData.email.trim(),
         password: formData.password,
       });
 
-      // Backend returns token with embedded role: JWT { id, role, exp, ... }
-      const { token, user } = response.data;
+      const token = response.data.accessToken;
+      const role = response.data.role?.toLowerCase();
 
-      // Validate response has required fields
+      // ----- VALIDATION FIRST -----
       if (!token) {
         throw new Error("Authentication failed: No token received");
       }
 
-      if (!user || !user.role) {
+      if (!role) {
         throw new Error("Authentication failed: No role information");
       }
 
-      // Store authentication credentials
+      // ----- STORE ONLY WHAT WE ACTUALLY HAVE -----
       localStorage.setItem("token", token);
-      localStorage.setItem("role", user.role);
-      localStorage.setItem("userId", user.id);
-      localStorage.setItem("userName", user.name);
+      localStorage.setItem("role", role);
 
       setSuccess("Login successful! Redirecting...");
 
-      // Redirect to role-specific dashboard after brief delay
       setTimeout(() => {
-        navigate(roleRedirectMap[user.role] || "/student", { replace: true });
+        navigate(roleRedirectMap[role] || "/student", { replace: true });
       }, 500);
+
     } catch (err) {
-      // Display backend error message or fallback
       const serverError =
         err.response?.data?.message ||
-        err.response?.data?.error ||
         err.message ||
-        "Login failed. Please check your credentials and try again.";
+        "Login failed. Please check your credentials.";
 
       setError(serverError);
       console.error("Login error:", err);
-    } finally {
+    }
+    finally {
       setLoading(false);
     }
   };
@@ -167,8 +163,7 @@ const Login = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="your@email.com"
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                validationErrors.email ? "border-red-500" : "border-gray-300"
+              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.email ? "border-red-500" : "border-gray-300"
                 }`}
             />
             {validationErrors.email && (
@@ -188,8 +183,7 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
-              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                validationErrors.password ? "border-red-500" : "border-gray-300"
+              className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${validationErrors.password ? "border-red-500" : "border-gray-300"
                 }`}
             />
             {validationErrors.password && (

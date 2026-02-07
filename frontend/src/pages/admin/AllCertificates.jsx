@@ -12,7 +12,7 @@ const AllCertificates = () => {
   const [search, setSearch] = useState("");
 
   const backendOrigin =
-    (import.meta.env.VITE_API_URL || "http://localhost:3000").replace("/api", "");
+    (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/api$/, "");
 
   const isActive = (path) => location.pathname === path;
 
@@ -99,11 +99,11 @@ const AllCertificates = () => {
                     <span>{new Date(cert.issueDate).toLocaleDateString()}</span>
 
                     <span
-                      className={`px-2 py-1 rounded-full text-xs font-semibold w-fit
-                        {(cert.status || "").toLowerCase() === "active"
+                      className={`px-2 py-1 rounded-full text-xs font-semibold w-fit ${
+                        (cert.status || "").toLowerCase() === "active"
                           ? "bg-green-100 text-green-700"
                           : "bg-yellow-100 text-yellow-700"
-                        }`}
+                      }`}
                     >
                       {cert.status || "Pending"}
                     </span>
